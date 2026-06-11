@@ -6,6 +6,7 @@ const {
   getConsultationById,
   updateConsultation,
   deleteConsultation,
+  searchConsultations,
 } = require("../controllers/consultationController");
 
 const authMiddleware = require("../middleware/authMiddleware");
@@ -14,6 +15,7 @@ const upload = require("../config/multerConfig");
 const router = express.Router();
 
 router.get("/", authMiddleware, getConsultations);
+router.get("/search", authMiddleware, searchConsultations);
 router.get("/:id", authMiddleware, getConsultationById);
 router.post("/", authMiddleware, upload.single("audio"), createConsultation);
 router.put("/:id", authMiddleware, updateConsultation);

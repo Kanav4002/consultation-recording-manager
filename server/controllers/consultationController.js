@@ -170,10 +170,61 @@ const deleteConsultation = async (req, res) => {
   }
 };
 
+const searchConsultations = async (req, res) => {
+  try {
+    const query = req.query.q;
+
+    if (!query) {
+      return res.status(400).json({
+        message: "Search query is required",
+      });
+    }
+
+    const consultations = await Consultation.find({
+      userId: req.user.userId,
+
+      $or: [
+        {
+          clientName: {
+            $regex: query,
+            $options: "i",
+          },
+        },
+
+        {
+          title: {
+            $regex: query,
+            $options: "i",
+          },
+        },
+
+        {
+          category: {
+            $regex: query,
+            $options: "i",
+          },
+        },
+      ],
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      count: consultations.length,
+      consultations,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
 module.exports = {
   createConsultation,
   getConsultations,
   getConsultationById,
   updateConsultation,
   deleteConsultation,
+  searchConsultations,
 };

@@ -23,7 +23,7 @@ export default function Register() {
       await register(form);
       const data = await login(form);
       saveAuth(data.token, data.user);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
     } finally {

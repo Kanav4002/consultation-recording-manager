@@ -22,7 +22,7 @@ export default function Login() {
     try {
       const data = await login(form);
       saveAuth(data.token, data.user);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     } finally {

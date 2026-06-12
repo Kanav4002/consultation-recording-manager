@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, useParams, useLocation } from 'react-router
 import Sidebar from '../components/Sidebar';
 import TopBar from '../components/TopBar';
 import ProtectedRoute from '../components/ProtectedRoute';
+import LandingPage from '../pages/landing/LandingPage';
 import Dashboard from '../pages/dashboard/Dashboard';
 import ConsultationHistory from '../pages/consultations/History';
 import UploadConsultation from '../pages/consultations/UploadConsultation';
@@ -11,7 +12,7 @@ import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 
 const PAGE_TITLES = {
-  '/': 'Dashboard',
+  '/dashboard': 'Dashboard',
   '/upload': 'Upload Consultation',
   '/history': 'Consultation History',
 };
@@ -22,7 +23,7 @@ function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleNavigate = (page, consultationId) => {
-    if (page === 'dashboard') navigate('/');
+    if (page === 'dashboard') navigate('/dashboard');
     else if (page === 'upload') navigate('/upload');
     else if (page === 'history') navigate('/history');
     else if (page === 'details') navigate(`/consultations/${consultationId}`);
@@ -48,7 +49,7 @@ function AppLayout() {
         <TopBar title={title} onMenuClick={() => setMobileOpen(true)} />
         <main className="flex-1 overflow-y-auto">
           <Routes>
-            <Route path="/" element={<Dashboard onNavigate={handleNavigate} />} />
+            <Route path="/dashboard" element={<Dashboard onNavigate={handleNavigate} />} />
             <Route path="/upload" element={<UploadConsultation onNavigate={handleNavigate} />} />
             <Route path="/history" element={<ConsultationHistory onNavigate={handleNavigate} />} />
             <Route path="/consultations/:id" element={<ConsultationDetailsPage onNavigate={handleNavigate} />} />
@@ -67,6 +68,7 @@ function ConsultationDetailsPage({ onNavigate }) {
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route

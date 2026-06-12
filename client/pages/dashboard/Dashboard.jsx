@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Mic, FileText, AudioLines, TrendingUp, Upload, History, ChevronRight, ArrowUpRight } from 'lucide-react';
 import { getDashboardStats } from '../../services/dashboardService';
+import { useAuth } from '../../context/AuthContext';
 import CategoryBadge from '../../components/CategoryBadge';
 
 function initials(name) {
@@ -27,6 +28,8 @@ const avatarColors = [
 ];
 
 export default function Dashboard({ onNavigate }) {
+  const { user } = useAuth();
+  const firstName = user?.name?.split(' ')[0] || 'there';
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,7 +43,7 @@ export default function Dashboard({ onNavigate }) {
 
   if (loading) {
     return (
-      <div className="p-8 max-w-5xl flex items-center justify-center h-64">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-5xl flex items-center justify-center h-64">
         <p className="text-sm text-gray-400">Loading dashboard...</p>
       </div>
     );
@@ -48,7 +51,7 @@ export default function Dashboard({ onNavigate }) {
 
   if (error) {
     return (
-      <div className="p-8 max-w-5xl flex items-center justify-center h-64">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-5xl flex items-center justify-center h-64">
         <p className="text-sm text-red-500">{error}</p>
       </div>
     );
@@ -57,12 +60,12 @@ export default function Dashboard({ onNavigate }) {
   const recent = stats.recentConsultations || [];
 
   return (
-    <div className="p-8 max-w-5xl">
-      <h1 className="text-2xl font-bold text-gray-900">Welcome back, Dr. Sarah</h1>
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl">
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Welcome back, {firstName}</h1>
       <p className="text-sm text-gray-500 mt-1">Here's an overview of your consultations.</p>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-6">
         <StatCard
           label="Total Consultations"
           value={String(stats.totalConsultations)}
@@ -80,10 +83,10 @@ export default function Dashboard({ onNavigate }) {
         />
       </div>
 
-      <div className="mt-6 grid grid-cols-3 gap-4">
+      <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Recent consultations */}
-        <div className="col-span-2 bg-white border border-gray-200 rounded-xl overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+        <div className="lg:col-span-2 bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b border-gray-100">
             <div>
               <p className="font-semibold text-gray-900 text-sm">Recent Consultations</p>
               <p className="text-xs text-gray-400 mt-0.5">Your latest 5 sessions</p>
@@ -97,13 +100,13 @@ export default function Dashboard({ onNavigate }) {
           </div>
           <ul>
             {recent.length === 0 && (
-              <li className="px-5 py-8 text-center text-sm text-gray-400">No consultations yet.</li>
+              <li className="px-4 sm:px-5 py-8 text-center text-sm text-gray-400">No consultations yet.</li>
             )}
             {recent.map((c, i) => (
               <li key={c._id}>
                 <button
                   onClick={() => onNavigate('details', c._id)}
-                  className={`w-full flex items-center gap-3 px-5 py-3.5 hover:bg-gray-50 transition-colors text-left ${
+                  className={`w-full flex items-center gap-3 px-4 sm:px-5 py-3.5 hover:bg-gray-50 transition-colors text-left ${
                     i !== recent.length - 1 ? 'border-b border-gray-100' : ''
                   }`}
                 >
@@ -111,14 +114,14 @@ export default function Dashboard({ onNavigate }) {
                     {initials(c.clientName)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-semibold text-gray-900">{c.clientName}</span>
                       <CategoryBadge category={c.category} />
                     </div>
                     <p className="text-xs text-gray-500 mt-0.5 truncate">{c.title}</p>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="text-xs text-gray-400">{formatDate(c.createdAt)}</span>
+                    <span className="text-xs text-gray-400 hidden sm:inline">{formatDate(c.createdAt)}</span>
                     <ChevronRight className="w-4 h-4 text-gray-300" />
                   </div>
                 </button>
@@ -129,7 +132,7 @@ export default function Dashboard({ onNavigate }) {
 
         {/* Quick actions */}
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden h-fit">
-          <div className="px-5 py-4 border-b border-gray-100">
+          <div className="px-4 sm:px-5 py-4 border-b border-gray-100">
             <p className="font-semibold text-gray-900 text-sm">Quick Actions</p>
             <p className="text-xs text-gray-400 mt-0.5">Jump to common tasks</p>
           </div>
@@ -157,7 +160,7 @@ export default function Dashboard({ onNavigate }) {
 
 function StatCard({ label, value, badge, icon }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl px-5 py-4">
+    <div className="bg-white border border-gray-200 rounded-xl px-4 sm:px-5 py-4">
       <div className="flex items-start justify-between">
         <p className="text-xs text-gray-500 font-medium">{label}</p>
         {icon}

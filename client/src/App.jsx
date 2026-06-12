@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import TopBar from '../components/TopBar';
@@ -18,6 +19,7 @@ const PAGE_TITLES = {
 function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleNavigate = (page, consultationId) => {
     if (page === 'dashboard') navigate('/');
@@ -36,9 +38,14 @@ function AppLayout() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 font-sans">
-      <Sidebar activePage={activePage} onNavigate={handleNavigate} />
+      <Sidebar
+        activePage={activePage}
+        onNavigate={handleNavigate}
+        mobileOpen={mobileOpen}
+        onMobileClose={() => setMobileOpen(false)}
+      />
       <div className="flex-1 flex flex-col min-w-0">
-        <TopBar title={title} />
+        <TopBar title={title} onMenuClick={() => setMobileOpen(true)} />
         <main className="flex-1 overflow-y-auto">
           <Routes>
             <Route path="/" element={<Dashboard onNavigate={handleNavigate} />} />

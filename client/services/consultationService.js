@@ -22,6 +22,11 @@ export const createConsultation = async (formData) => {
   return data;
 };
 
+export const updateConsultation = async (id, updates) => {
+  const { data } = await api.put(`/consultations/${id}`, updates);
+  return data;
+};
+
 export const deleteConsultation = async (id) => {
   const { data } = await api.delete(`/consultations/${id}`);
   return data;

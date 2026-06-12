@@ -1,10 +1,12 @@
 import { useState, useRef } from 'react';
 import { UploadCloud } from 'lucide-react';
 import { createConsultation } from '../../services/consultationService';
+import { useNotifications } from '../../context/NotificationContext';
 
 const CATEGORIES = ['Therapy', 'Financial', 'Astrology', 'Legal', 'Coaching', 'Medical'];
 
 export default function UploadConsultation({ onNavigate }) {
+  const { addNotification } = useNotifications();
   const [dragOver, setDragOver] = useState(false);
   const [file, setFile] = useState(null);
   const [form, setForm] = useState({
@@ -57,6 +59,11 @@ export default function UploadConsultation({ onNavigate }) {
       formData.append('audio', file);
 
       const data = await createConsultation(formData);
+      addNotification({
+        title: 'Consultation uploaded',
+        description: `${form.clientName} — ${form.title}`,
+        link: `/consultations/${data.consultation._id}`,
+      });
       onNavigate('details', data.consultation._id);
     } catch (err) {
       setError(err.response?.data?.message || 'Upload failed. Please try again.');

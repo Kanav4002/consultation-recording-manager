@@ -4,6 +4,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const consultationRoutes = require("./routes/consultationRoutes");
 const noteRoutes = require("./routes/noteRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const path = require("path");
 
@@ -27,5 +28,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/consultations", consultationRoutes);
 app.use("/api", noteRoutes);
+app.use("/api/dashboard", dashboardRoutes,
+);
 
 module.exports = app;

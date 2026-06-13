@@ -5,6 +5,7 @@ const authRoutes = require("./routes/authRoutes");
 const consultationRoutes = require("./routes/consultationRoutes");
 const noteRoutes = require("./routes/noteRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const healthRoutes = require("./routes/healthRoutes");
 
 const path = require("path");
 
@@ -23,6 +24,9 @@ app.get("/", (req, res) => {
     message: "Consultation Recording Manager API is running 🚀",
   });
 });
+
+// Health check
+app.use(healthRoutes);
 
 // Routes
 app.use("/api/auth", authRoutes);

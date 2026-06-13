@@ -1,5 +1,5 @@
 const Consultation = require("../models/Consultation");
-const fs = require("fs");
+const { cloudinary } = require("../config/cloudinary");
 
 const createConsultation = async (req, res) => {
   try {
@@ -152,8 +152,13 @@ const deleteConsultation = async (req, res) => {
       });
     }
 
-    if (consultation.audioPath && fs.existsSync(consultation.audioPath)) {
-      fs.unlinkSync(consultation.audioPath);
+    if (consultation.audioPath) {
+      const parts = consultation.audioPath.split("/");
+      const folderAndFile = parts.slice(parts.indexOf("upload") + 1).join("/");
+      const publicId = folderAndFile.replace(/\.[^.]+$/, "");
+      await cloudinary.uploader.destroy(publicId, {
+        resource_type: "video",
+      });
     }
 
     await consultation.deleteOne();

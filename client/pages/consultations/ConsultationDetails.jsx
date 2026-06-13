@@ -142,9 +142,7 @@ export default function ConsultationDetails({ consultationId, onNavigate }) {
     }
   }
 
-  const audioUrl = consultation
-    ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:4000'}/${consultation.audioPath}`
-    : '';
+  const audioUrl = consultation?.audioPath || '';
 
   function togglePlay() {
     if (!audioRef.current) return;
